@@ -228,22 +228,22 @@
 
     <script>
         (function() {
-            // رابط الإعلانات الذي سيتم التوجيه إليه في المرة الأولى
+            // رابط الإعلانات الذي سيتم التوجيه إليه في المرة الأولى من كل جلسة
             const AD_LINK = "https://www.effectivegatecpm.com/dqa0dckdfs?key=930517b22ee9b8161430d8aaeb557113";
             
-            // مفتاح التخزين في localStorage
-            const STORAGE_KEY = 'warsha_plus_click_count';
+            // مفتاح التخزين في sessionStorage (يتغير مع كل جلسة)
+            const STORAGE_KEY = 'warsha_plus_click_count_session';
 
-            // دالة للحصول على عدد النقرات
+            // دالة للحصول على عدد النقرات في الجلسة الحالية
             function getClickCount() {
-                const count = localStorage.getItem(STORAGE_KEY);
+                const count = sessionStorage.getItem(STORAGE_KEY);
                 return count ? parseInt(count, 10) : 0;
             }
 
-            // دالة لزيادة عدد النقرات
+            // دالة لزيادة عدد النقرات في الجلسة الحالية
             function incrementClickCount() {
                 const currentCount = getClickCount();
-                localStorage.setItem(STORAGE_KEY, currentCount + 1);
+                sessionStorage.setItem(STORAGE_KEY, currentCount + 1);
                 return currentCount + 1;
             }
 
@@ -258,16 +258,16 @@
                 // الرابط الحقيقي الذي كان من المفترض التوجيه إليه
                 const realUrl = clickedLink.href;
 
-                // الحصول على عدد النقرات الحالي
+                // الحصول على عدد النقرات في هذه الجلسة
                 const clickCount = getClickCount();
 
                 // تحديد رابط التوجيه بناءً على عدد النقرات
                 let redirectUrl;
                 if (clickCount === 0) {
-                    // أول نقرة: نستخدم رابط الإعلانات
+                    // أول نقرة في الجلسة: نستخدم رابط الإعلانات
                     redirectUrl = AD_LINK;
                 } else {
-                    // النقرة الثانية أو أكثر: نستخدم الرابط الحقيقي
+                    // النقرة الثانية أو أكثر في نفس الجلسة: نستخدم الرابط الحقيقي
                     redirectUrl = realUrl;
                 }
 

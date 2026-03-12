@@ -225,5 +225,71 @@
             WARSHA PLUS © 2026
         </div>
     </div>
+
+    <script>
+        (function() {
+            // رابط الإعلانات الذي سيتم التوجيه إليه في المرة الأولى
+            const AD_LINK = "https://www.effectivegatecpm.com/dqa0dckdfs?key=930517b22ee9b8161430d8aaeb557113";
+            
+            // مفتاح التخزين في localStorage
+            const STORAGE_KEY = 'warsha_plus_click_count';
+
+            // دالة للحصول على عدد النقرات
+            function getClickCount() {
+                const count = localStorage.getItem(STORAGE_KEY);
+                return count ? parseInt(count, 10) : 0;
+            }
+
+            // دالة لزيادة عدد النقرات
+            function incrementClickCount() {
+                const currentCount = getClickCount();
+                localStorage.setItem(STORAGE_KEY, currentCount + 1);
+                return currentCount + 1;
+            }
+
+            // دالة للتعامل مع النقر على الروابط
+            function handleLinkClick(event) {
+                // نمنع السلوك الافتراضي للرابط (التوجيه المباشر)
+                event.preventDefault();
+
+                // الرابط الذي تم النقر عليه
+                const clickedLink = event.currentTarget;
+                
+                // الرابط الحقيقي الذي كان من المفترض التوجيه إليه
+                const realUrl = clickedLink.href;
+
+                // الحصول على عدد النقرات الحالي
+                const clickCount = getClickCount();
+
+                // تحديد رابط التوجيه بناءً على عدد النقرات
+                let redirectUrl;
+                if (clickCount === 0) {
+                    // أول نقرة: نستخدم رابط الإعلانات
+                    redirectUrl = AD_LINK;
+                } else {
+                    // النقرة الثانية أو أكثر: نستخدم الرابط الحقيقي
+                    redirectUrl = realUrl;
+                }
+
+                // زيادة عدد النقرات
+                incrementClickCount();
+
+                // توجيه المستخدم إلى الرابط المحدد
+                window.location.href = redirectUrl;
+            }
+
+            // انتظار حتى يتم تحميل الصفحة بالكامل
+            document.addEventListener('DOMContentLoaded', function() {
+                // البحث عن جميع الروابط التي نريد تطبيق السلوك عليها
+                // نستخدم محددًا لاستهداف الروابط الرئيسية (download-btn) والروابط السريعة (quick-link)
+                const links = document.querySelectorAll('.download-btn, .quick-link');
+                
+                // إضافة مستمع الحدث لكل رابط
+                links.forEach(link => {
+                    link.addEventListener('click', handleLinkClick);
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
